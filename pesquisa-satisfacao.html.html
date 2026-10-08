@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pesquisa de Satisfação e Qualidade | Omnilink</title>
+  <style>
+    :root {
+      --primary: #1a365d;
+      --primary-light: #2b6cb0;
+      --accent: #3182ce;
+      --bg: #f7fafc;
+      --card: #ffffff;
+      --text: #1a202c;
+      --text-muted: #718096;
+      --border: #e2e8f0;
+      --success: #38a169;
+      --radius: 12px;
+      --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(135deg, #edf2f7 0%, #e2e8f0 100%);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.5;
+      padding: 24px 16px 48px;
+    }
+
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .logo {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--primary);
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+
+    header h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+
+    header p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 32px 28px;
+      margin-bottom: 24px;
+    }
+
+    .section-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-title span {
+      background: var(--primary);
+      color: white;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin-bottom: 6px;
+      color: var(--text);
+    }
+
+    label .required {
+      color: #e53e3e;
+      margin-left: 2px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      background: #fff;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.15);
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    /* Escala 0-10 */
+    .rating-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .rating-option {
+      position: relative;
+    }
+
+    .rating-option input {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .rating-option label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.15s;
+      margin: 0;
+      background: #fff;
+      color: var(--text);
+    }
+
+    .rating-option input:checked + label {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: white;
+      transform: scale(1.05);
+    }
+
+    .rating-option label:hover {
+      border-color: var(--accent);
+      background: #ebf8ff;
+    }
+
+    .rating-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+      padding: 0 2px;
+    }
+
+    .team-name {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 400;
+      margin-top: 2px;
+    }
+
+    .btn-submit {
+      display: block;
+      width: 100%;
+      padding: 14px 24px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.05rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+      margin-top: 8px;
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(26, 54, 93, 0.3);
+    }
+
+    .btn-submit:active {
+      transform: translateY(0);
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 24px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .success-message {
+      display: none;
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .success-message.show {
+      display: block;
+    }
+
+    .success-icon {
+      font-size: 3rem;
+      margin-bottom: 16px;
+    }
+
+    .success-message h2 {
+      color: var(--success);
+      margin-bottom: 8px;
+    }
+
+    @media (max-width: 480px) {
+      .card {
+        padding: 24px 18px;
+      }
+      .rating-option label {
+        width: 36px;
+        height: 36px;
+        font-size: 0.85rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">Omnilink</div>
+      <h1>Pesquisa de Satisfação e Qualidade</h1>
+      <p>Setembro 2026 · Sua opinião é muito importante para nós</p>
+    </header>
+
+    <form id="pesquisaForm" action="https://formsubmit.co/kleiton.lima@omnilink.com.br" method="POST">
+      <!-- Configurações do FormSubmit -->
+      <input type="hidden" name="_subject" value="Nova Resposta - Pesquisa de Satisfação e Qualidade | Setembro 2026">
+      <input type="hidden" name="_captcha" value="false">
+      <input type="hidden" name="_template" value="table">
+      <input type="hidden" name="_next" value="">
+
+      <!-- Dados do Respondente -->
+      <div class="card">
+        <div class="section-title"><span>1</span> Dados do Respondente</div>
+
+        <div class="form-group">
+          <label for="nome">Nome <span class="required">*</span></label>
+          <input type="text" id="nome" name="Nome" required placeholder="Seu nome completo">
+        </div>
+
+        <div class="form-group">
+          <label for="empresa">Nome da Empresa <span class="required">*</span></label>
+          <input type="text" id="empresa" name="Nome da Empresa" required placeholder="Nome da sua empresa">
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email do Respondente <span class="required">*</span></label>
+          <input type="email" id="email" name="Email do Respondente" required placeholder="seu.email@empresa.com">
+        </div>
+      </div>
+
+      <!-- Time ADO Guarabira-PB -->
+      <div class="card">
+        <div class="section-title"><span>2</span> Time ADO Guarabira-PB</div>
+        <p class="team-name" style="margin-bottom:16px">Leandro, Gerson, Matheus, Kalina, Camilla, Sonyele, Maria Luiza, Kaline, Geiciynna e Thays</p>
+
+        <div class="form-group">
+          <label>De 0 a 10, como avalia o nível de serviço do Time ADO Guarabira-PB? <span class="required">*</span></label>
+          <div class="rating-group">
+            <div class="rating-option"><input type="radio" name="Nota Time ADO Guarabira-PB" id="g0" value="0" required><label for="g0">0</label></div>
+            <div class="rating-option"><input type="radio" name="Nota Time ADO Guarabira-PB" id="g1" value="1"><label for="g1">1</label></div>
+            <div class="rating-option"><input type="radio" name="Nota Time ADO Guarabira-PB" id="g2" value="2"><label for="g2">2</label></div>
+            <div class="rating-option"><input type="radio" name="Nota Time ADO Guarabira-PB" id="g3" value="3"><label for="g3">3</label></div>
+            <div class="rating-option"><input type="radio" name="Nota Time ADO Guarabira-PB" id="g4" value="4"><label for="g4">4</label></div>
+            <div class="rating-option"><input type="radio" name="Nota Time ADO Guarabira-PB" id="g5" value="5"><label for="g5">5</label></div>
+            <div class="rating-option"><input type="radio" name="Nota Time ADO Guarabira-PB" id="g6" value="6"><label for="g6">6</label></div>
+            <div class="rating-option"><input type="radio" name="Nota Time ADO Guarabira-PB" id="g7" value="7"><label for="g7">7</label></div>
+            <div class="rating-option"><input type="radio" name="Nota Time ADO Guarabira-PB" id="g8" value="8"><label for="g8">8</label></div>
+            <div class="rating-option"><input type="radio" name="Nota Time ADO Guarabira-PB" id="g9" value="9"><label for="g9">9</label></div>
+            <div class="rating-option"><input type="radio" name="Nota Time ADO Guarabira-PB" id="g10" value="10"><label for="g10">10</label></div>
+          </div>
+          <div class="rating-labels">
+            <span>Muito insatisfeito</span>
+            <span>Muito satisfeito</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="motivo_guarabira">Poderia nos contar o motivo da sua nota e/ou o que podemos melhorar no time ADO Guarabira?</label>
+          <textarea id="motivo_guarabira" name="Motivo / Sugestão - Time ADO Guarabira" placeholder="Conte-nos o que motivou sua nota e como podemos melhorar..."></textarea>
+        </div>
+      </div>
+
+      <!-- Time ADO Projetos/N2 -->
+      <div class="card">
+        <div class="section-title"><span>3</span> Time ADO Projetos / N2</div>
+        <p class="team-name" style="margin-bottom:16px">Maiara, Wanesa, Letícia e Kleiton</p>
+
+        <div class="form-group">
+          <label>De 0 a 10, como avalia o nível de serviço do Time ADO Projetos/N2? <span class="required">*</span></label>
+          <div class="rating-group">
+            <div class="rating-option"><input type="radio" name="Nota Time ADO Projetos/N2" id="p0" value="0" required><label for="p0">0</label></div>
+            <div class="rating-option"><input type="radio" name="Nota Time ADO Projetos/N2" id="p1" value="1"><label for="p1">1</label></div>
+            <div class="rating-option"><input type="radio" name="Nota Time ADO Projetos/N2" id="p2" value="2"><label for="p2">2</label></div>
+            <div class="rating-option"><input type="radio" name="Nota Time ADO Projetos/N2" id="p3" value="3"><label for="p3">3</label></div>
+            <div class="rating-option"><input type="radio" name="Nota Time ADO Projetos/N2" id="p4" value="4"><label for="p4">4</label></div>
+            <div class="rating-option"><input type="radio" name="Nota Time ADO Projetos/N2" id="p5" value="5"><label for="p5">5</label></div>
+            <div class="rating-option"><input type="radio" name="Nota Time ADO Projetos/N2" id="p6" value="6"><label for="p6">6</label></div>
+            <div class="rating-option"><input type="radio" name="Nota Time ADO Projetos/N2" id="p7" value="7"><label for="p7">7</label></div>
+            <div class="rating-option"><input type="radio" name="Nota Time ADO Projetos/N2" id="p8" value="8"><label for="p8">8</label></div>
+            <div class="rating-option"><input type="radio" name="Nota Time ADO Projetos/N2" id="p9" value="9"><label for="p9">9</label></div>
+            <div class="rating-option"><input type="radio" name="Nota Time ADO Projetos/N2" id="p10" value="10"><label for="p10">10</label></div>
+          </div>
+          <div class="rating-labels">
+            <span>Muito insatisfeito</span>
+            <span>Muito satisfeito</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="motivo_projetos">Poderia nos contar o motivo da sua nota e/ou o que podemos melhorar no time ADO Projetos/N2?</label>
+          <textarea id="motivo_projetos" name="Motivo / Sugestão - Time ADO Projetos/N2" placeholder="Conte-nos o que motivou sua nota e como podemos melhorar..."></textarea>
+        </div>
+      </div>
+
+      <!-- Time ADO Especialistas de Negócio -->
+      <div class="card">
+        <div class="section-title"><span>4</span> Time ADO Especialistas de Negócio</div>
+        <p class="team-name" style="margin-bottom:16px">Tiago Mota, Paulo Flausino e Camilly Rizzitano</p>
+
+        <div class="form-group">
+          <label>De 0 a 10, como avalia o nível de serviço do Time ADO Especialistas de Negócio? <span class="required">*</span></label>
+          <div class="rating-group">
+            <div class="rating-option"><input type="radio" name="Nota Time ADO Especialistas de Negócio" id="e0" value="0" required><label for="e0">0</label></div>
+            <div class="rating-option"><input type="radio" name="Nota Time ADO Especialistas de Negócio" id="e1" value="1"><label for="e1">1</label></div>
+            <div class="rating-option"><input type="radio" name="Nota Time ADO Especialistas de Negócio" id="e2" value="2"><label for="e2">2</label></div>
+            <div class="rating-option"><input type="radio" name="Nota Time ADO Especialistas de Negócio" id="e3" value="3"><label for="e3">3</label></div>
+            <div class="rating-option"><input type="radio" name="Nota Time ADO Especialistas de Negócio" id="e4" value="4"><label for="e4">4</label></div>
+            <div class="rating-option"><input type="radio" name="Nota Time ADO Especialistas de Negócio" id="e5" value="5"><label for="e5">5</label></div>
+            <div class="rating-option"><input type="radio" name="Nota Time ADO Especialistas de Negócio" id="e6" value="6"><label for="e6">6</label></div>
+            <div class="rating-option"><input type="radio" name="Nota Time ADO Especialistas de Negócio" id="e7" value="7"><label for="e7">7</label></div>
+            <div class="rating-option"><input type="radio" name="Nota Time ADO Especialistas de Negócio" id="e8" value="8"><label for="e8">8</label></div>
+            <div class="rating-option"><input type="radio" name="Nota Time ADO Especialistas de Negócio" id="e9" value="9"><label for="e9">9</label></div>
+            <div class="rating-option"><input type="radio" name="Nota Time ADO Especialistas de Negócio" id="e10" value="10"><label for="e10">10</label></div>
+          </div>
+          <div class="rating-labels">
+            <span>Muito insatisfeito</span>
+            <span>Muito satisfeito</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="motivo_especialistas">Poderia nos contar o motivo da sua nota e/ou o que podemos melhorar no time ADO Especialistas de Negócio?</label>
+          <textarea id="motivo_especialistas" name="Motivo / Sugestão - Time ADO Especialistas de Negócio" placeholder="Conte-nos o que motivou sua nota e como podemos melhorar..."></textarea>
+        </div>
+      </div>
+
+      <!-- Botão Enviar -->
+      <div class="card" style="padding: 24px 28px;">
+        <button type="submit" class="btn-submit">Enviar Avaliação</button>
+      </div>
+    </form>
+
+    <footer>
+      Omnilink · Pesquisa de Satisfação e Qualidade · Setembro 2026<br>
+      As respostas serão enviadas para kleiton.lima@omnilink.com.br
+    </footer>
+  </div>
+
+  <script>
+    // Define a página de agradecimento (mesma página)
+    document.querySelector('input[name="_next"]').value = window.location.href.split('?')[0] + '?enviado=1';
+
+    // Mostra mensagem de sucesso se veio do redirecionamento
+    if (window.location.search.includes('enviado=1')) {
+      document.getElementById('pesquisaForm').style.display = 'none';
+      const success = document.createElement('div');
+      success.className = 'card success-message show';
+      success.innerHTML = `
+        <div class="success-icon">✅</div>
+        <h2>Obrigado pela sua avaliação!</h2>
+        <p>Sua resposta foi enviada com sucesso para a equipe Omnilink.</p>
+        <p style="margin-top:12px;font-size:0.9rem;color:#718096;">Você pode fechar esta página.</p>
+      `;
+      document.querySelector('.container').insertBefore(success, document.querySelector('footer'));
+    }
+  </script>
+</body>
+</html>
